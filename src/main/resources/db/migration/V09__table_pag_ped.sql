@@ -1,0 +1,18 @@
+-- CREATE TABLE pag_ped (
+--     id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+--     tipo_pagamento VARCHAR(20) NOT NULL,
+--     data_vencimento DATE NOT NULL,
+--     data_pagamento DATE,
+-- 	valor DECIMAL(10,2) NOT NULL,
+--     banco VARCHAR(100),
+--     agencia VARCHAR(100),
+--     conta VARCHAR(100),
+--     emitente VARCHAR(100),
+--     num_cheque VARCHAR(100),
+--     id_pedido BIGINT(20) NOT NULL,
+--     FOREIGN KEY (id_pedido) REFERENCES pedido (id)
+	-- id_item_pedido BIGINT(20) NOT NULL,
+    -- id_romaneio BIGINT(20) NOT NULL,
+	-- FOREIGN KEY (id_item_pedido) REFERENCES item_pedido (id),
+	-- FOREIGN KEY (id_romaneio) REFERENCES romaneio (id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

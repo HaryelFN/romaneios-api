@@ -1,0 +1,28 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.romaneios.config.property.MyProperty",
+      "name": "my-property",
+      "type": "com.romaneios.config.property.MyProperty"
+    },
+    {
+      "sourceType": "com.romaneios.config.property.MyProperty",
+      "name": "my-property.seguranca",
+      "sourceMethod": "public com.romaneios.config.property.MyProperty.Seguranca getSeguranca() ",
+      "type": "com.romaneios.config.property.MyProperty$Seguranca"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.romaneios.config.property.MyProperty",
+      "name": "my-property.origin-permitida",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.romaneios.config.property.MyProperty$Seguranca",
+      "name": "my-property.seguranca.enable-https",
+      "type": "java.lang.Boolean"
+    }
+  ]
+}
