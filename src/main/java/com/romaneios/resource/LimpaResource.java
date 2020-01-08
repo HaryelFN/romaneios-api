@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewLimpasList;
 import com.romaneios.dto.limpa.LimpaDTO;
 import com.romaneios.dto.limpa.LimpaNewDTO;
 import com.romaneios.dto.limpa.limpaListDTO;
@@ -46,9 +48,10 @@ public class LimpaResource {
 
 	@GetMapping(params = "pageable")
 	@PreAuthorize("hasAuthority('ROLE_FIND_LIMPA') and #oauth2.hasScope('read')")
-	public Page<limpaListDTO> getAll(@RequestParam String numero, Pageable pageable) {
-		numero = "%" + numero + "%";
-		return repository.getPageableByClienteNome(numero, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
+	public Page<limpaListDTO> getAll(@RequestParam String nome, Pageable pageable) {
+		nome = "%" + nome + "%";
+		return repository.getPageableByClienteNome(nome,
+				PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
 	}
 
 	@GetMapping("/{id}")
@@ -58,6 +61,7 @@ public class LimpaResource {
 		return obj.isPresent() ? ResponseEntity.ok(obj.get()) : ResponseEntity.notFound().build();
 	}
 
+	@JsonView(ViewLimpasList.class)
 	@PostMapping
 	@PreAuthorize("hasAuthority('ROLE_ADD_LIMPA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Limpa> save(@Valid @RequestBody LimpaNewDTO dto, HttpServletResponse response) {
@@ -65,7 +69,7 @@ public class LimpaResource {
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, objSave.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(objSave);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAuthority('ROLE_REMOVE_LIMPA') and #oauth2.hasScope('write')")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

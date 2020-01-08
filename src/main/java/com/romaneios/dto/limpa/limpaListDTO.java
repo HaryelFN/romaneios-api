@@ -17,4 +17,6 @@ public interface limpaListDTO {
 	public Float getValor();
 
 	public String getStatus();
+	
+	public String getStatusPedido();
 }

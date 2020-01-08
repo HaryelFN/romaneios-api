@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewRomaneioDetails;
 import com.romaneios.dto.pagitempedido.PagItemPedPagarDTO;
 import com.romaneios.dto.romaneio.RomaneioResumoDTO;
 import com.romaneios.event.RecursoCriadoEvent;
@@ -58,6 +60,7 @@ public class RomaneioResource {
 				PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
 	}
 
+	@JsonView(ViewRomaneioDetails.class)
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('ROLE_FIND_ROMANEIO') and #oauth2.hasScope('read')")
 	public ResponseEntity<Romaneio> getById(@PathVariable Long id) {

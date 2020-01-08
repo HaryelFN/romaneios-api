@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewMovCaixaDetails;
 import com.romaneios.dto.ViewsJson.ViewRetiradaLimpaDTO;
 
 import lombok.Data;
@@ -25,7 +26,7 @@ public class Retirada implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@JsonView(ViewRetiradaLimpaDTO.class)
+	@JsonView({ ViewRetiradaLimpaDTO.class, ViewMovCaixaDetails.class })
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

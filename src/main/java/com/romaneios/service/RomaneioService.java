@@ -1,5 +1,6 @@
 package com.romaneios.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,9 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.romaneios.dto.pagitempedido.PagItemPedPagarDTO;
+import com.romaneios.model.Caixa;
+import com.romaneios.model.Cheque;
+import com.romaneios.model.ItemMov;
+import com.romaneios.model.MovCaixa;
 import com.romaneios.model.ProdutoRomaneio;
 import com.romaneios.model.Romaneio;
 import com.romaneios.repository.CaixaRepository;
+import com.romaneios.repository.ChequeRepository;
+import com.romaneios.repository.ItemMovRepository;
+import com.romaneios.repository.MovCaixaRepository;
 import com.romaneios.repository.ProdutoRomaneioRepository;
 import com.romaneios.repository.RomaneioRepository;
 import com.romaneios.service.execption.FornecedorException;
@@ -17,7 +25,7 @@ import com.romaneios.service.execption.FornecedorException;
 @Service
 public class RomaneioService {
 
-	private float cont = 0;
+	private MovCaixa mov;
 
 	@Autowired
 	private RomaneioRepository repository;
@@ -31,11 +39,17 @@ public class RomaneioService {
 	@Autowired
 	private CaixaRepository caixaRepository;
 
-//	@Autowired
-//	private PagamentoPedidoRepository pagPedRepository;
+	@Autowired
+	private MovCaixaRepository mcRepository;
 
 	@Autowired
-	private MovCaixaService pagPedService;
+	private ItemMovRepository imRepository;
+
+	@Autowired
+	private ChequeService chService;
+
+	@Autowired
+	private ChequeRepository chRepository;
 
 	public Romaneio salvar(Romaneio obj) {
 
@@ -79,52 +93,48 @@ public class RomaneioService {
 
 	public Romaneio pagarRomaneio(Long id, List<PagItemPedPagarDTO> list) {
 
-//		Romaneio r = isRoamneio(id);
-//
-//		list.forEach(c -> {
-//
-//			if (!c.getTipoPagamento().equals("Cheque")) {
-//
-//				PagamentoPedido pag = pagPedService.isPagItemPed(c.getId());
-//
-//				if (c.getValor() < pag.getValor()) {
-//
-//					pag.setTipoPagamento("À vista");
-//					pag.setDataPagamento(LocalDate.now());
-//					pag.setValor((pag.getValor() - c.getValor()));
-//					pag.setBanco(null);
-//					pag.setAgencia(null);
-//					pag.setConta(null);
-//					pag.setEmitente(null);
-//					pag.setNumCheque(null);
-//
-//					pagPedRepository.saveAndFlush(pag);
-//				} else {
-//					pagPedRepository.deleteById(c.getId());
-//				}
-//
-//			}
-//		});
-//
-//		// DESCONTRA NO CAIXA
-//		Caixa c1 = new Caixa();
-//		c1.setData(LocalDate.now());
-//
-//		list.forEach(l -> {
-//			this.cont += l.getValor();
-//		});
-//
-//		c1.setValor(this.cont);
-//		c1.setOperacao("Despesa");
-//		c1.setDescricao("Pagamento romaneio n° " + r.getNumero());
-//		c1.setRomaneio(r);
-//
-//		caixaRepository.save(c1);
-//
-//		r.setSituacao("Pago");
-//		return repository.saveAndFlush(r);
-		
-		return null;
+		Romaneio r = isRoamneio(id);
+
+		this.mov = new MovCaixa();
+		mov.setData(LocalDate.now());
+		mov.setValor(-r.getValorRomaneio());
+		mov.setDescricao("Pagamento romaneio n° " + r.getNumero());
+		mov.setOrigem("Romaneio");
+		mov.setRomaneio(r);
+
+		mov = mcRepository.save(mov);
+
+		list.forEach(c -> {
+			if (c.getTipoPagamento().equals("Cheque")) {
+
+				Cheque ch = chService.isExists(c.getId());
+
+				// INSERT VALOR NO CAIXA
+				Caixa c1 = new Caixa();
+				c1.setData(LocalDate.now());
+				c1.setValor(c.getValor());
+				c1 = caixaRepository.save(c1);
+
+				ch.setDtPag(LocalDate.now());
+				ch = chRepository.saveAndFlush(ch);
+			}
+		});
+
+		Caixa c1 = new Caixa();
+		c1.setData(LocalDate.now());
+		c1.setValor(-r.getValorRomaneio());
+		c1 = caixaRepository.save(c1);
+
+		ItemMov im = new ItemMov();
+		im.setTipo("À vista");
+		im.setMovCaixa(mov);
+		im.setValor(-r.getValorRomaneio());
+		im.setCaixa(c1);
+
+		imRepository.save(im);
+
+		r.setSituacao("Pago");
+		return repository.saveAndFlush(r);
 	}
 
 	public Romaneio isRoamneio(Long id) {

@@ -9,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewMovCaixaDetails;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,6 +20,7 @@ import lombok.EqualsAndHashCode;
 @Entity(name = "np")
 public class NotaPromissoria {
 
+	@JsonView(ViewMovCaixaDetails.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +36,6 @@ public class NotaPromissoria {
 	@NotNull
 	private float valor;
 
+	@NotNull
 	private String emitente;
 }

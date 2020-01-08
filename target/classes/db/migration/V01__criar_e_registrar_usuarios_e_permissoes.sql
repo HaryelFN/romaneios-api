@@ -58,6 +58,14 @@ INSERT INTO permissao (id, descricao) values (27, 'ROLE_REMOVE_LIMPA');
 
 INSERT INTO permissao (id, descricao) values (28, 'ROLE_DASHBORD');
 
+INSERT INTO permissao (id, descricao) values (29, 'ROLE_FIND_CHEQUE');
+INSERT INTO permissao (id, descricao) values (30, 'ROLE_ADD_CHEQUE');
+INSERT INTO permissao (id, descricao) values (31, 'ROLE_REMOVE_CHEQUE');
+
+INSERT INTO permissao (id, descricao) values (32, 'ROLE_FIND_NP');
+INSERT INTO permissao (id, descricao) values (33, 'ROLE_ADD_NP');
+INSERT INTO permissao (id, descricao) values (34, 'ROLE_REMOVE_NP');
+
 -- admin
 INSERT INTO usuario_permissao (id_usuario, id_permissao) values (1, 1);
 INSERT INTO usuario_permissao (id_usuario, id_permissao) values (1, 2);
@@ -96,3 +104,11 @@ INSERT INTO usuario_permissao (id_usuario, id_permissao) values (1, 26);
 INSERT INTO usuario_permissao (id_usuario, id_permissao) values (1, 27);
 
 INSERT INTO usuario_permissao (id_usuario, id_permissao) values (1, 28);
+
+INSERT INTO usuario_permissao (id_usuario, id_permissao) values (1, 29);
+INSERT INTO usuario_permissao (id_usuario, id_permissao) values (1, 30);
+INSERT INTO usuario_permissao (id_usuario, id_permissao) values (1, 31);
+
+INSERT INTO usuario_permissao (id_usuario, id_permissao) values (1, 32);
+INSERT INTO usuario_permissao (id_usuario, id_permissao) values (1, 33);
+INSERT INTO usuario_permissao (id_usuario, id_permissao) values (1, 34);

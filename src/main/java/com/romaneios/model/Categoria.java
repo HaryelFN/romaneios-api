@@ -8,6 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewPedidoDetails;
+import com.romaneios.dto.ViewsJson.ViewRomaneioDetails;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,11 +22,13 @@ public class Categoria implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonView({ViewRomaneioDetails.class, ViewPedidoDetails.class})
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@JsonView({ViewRomaneioDetails.class, ViewPedidoDetails.class})
 	@NotNull
 	private String nome;
 }

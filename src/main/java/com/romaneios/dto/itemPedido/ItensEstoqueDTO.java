@@ -5,6 +5,8 @@ public interface ItensEstoqueDTO {
 	public Long getId();
 
 	public String getProduto();
+	
+	public Integer getPendente();
 
 	public Integer getQtd();
 

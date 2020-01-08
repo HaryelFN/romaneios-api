@@ -1,6 +1,7 @@
 package com.romaneios.resource;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -15,14 +16,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewPedidoDetails;
 import com.romaneios.dto.pedido.PedidoNewDTO;
 import com.romaneios.dto.pedido.PedidoResumoDTO;
 import com.romaneios.dto.pedido.PedidoRomaneioDTO;
@@ -58,9 +64,17 @@ public class PedidoResource {
 				PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
 	}
 
+	@JsonView(ViewPedidoDetails.class)
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('ROLE_FIND_PEDIDO') and #oauth2.hasScope('read')")
-	public ResponseEntity<PedidoResumoDTO> getById(@PathVariable Long id) {
+	public ResponseEntity<Pedido> getById(@PathVariable Long id) {
+		Optional<Pedido> obj = repository.findById(id);
+		return obj.isPresent() ? ResponseEntity.ok(obj.get()) : ResponseEntity.notFound().build();
+	}
+
+	@GetMapping("/resumo/{id}")
+	@PreAuthorize("hasAuthority('ROLE_FIND_PEDIDO') and #oauth2.hasScope('read')")
+	public ResponseEntity<PedidoResumoDTO> pedResumoGetById(@PathVariable Long id) {
 		PedidoResumoDTO obj = repository.getByID(id);
 		return obj != null ? ResponseEntity.ok(obj) : ResponseEntity.notFound().build();
 	}
@@ -84,12 +98,31 @@ public class PedidoResource {
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, objSave.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(objSave);
 	}
+	
+	@PutMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_ADD_PEDIDO') and #oauth2.hasScope('write')")
+	public ResponseEntity<Pedido> update(@PathVariable Long id, @Valid @RequestBody PedidoNewDTO obj) {
+		Pedido objSave = service.update(id, obj);
+		return ResponseEntity.ok(objSave);
+	}
+	
+	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_REMOVE_PEDIDO') and #oauth2.hasScope('write')")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable Long id) {
+		service.remove(id);
+	}
 
-	// GET DOC PEDIDO VENDAS
-//	@GetMapping("/doc")
-//	@PreAuthorize("hasAuthority('ROLE_FIND_PEDIDO') and #oauth2.hasScope('read')")
-//	public ResponseEntity<byte[]> getDocPedidoVendasById(@RequestParam Long id) throws Exception {
-//		byte[] relatorio = service.pedidoVendasDoc(id);
-//		return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(relatorio);
-//	}
+	@GetMapping("/{id}/situacao/{situacao}")
+	@PreAuthorize("hasAuthority('ROLE_ADD_PEDIDO') and #oauth2.hasScope('write')")
+	public void update(@PathVariable Long id, @PathVariable String situacao) {
+		repository.updateSituacaoById(id, situacao);
+	}
+
+	@GetMapping("/doc")
+	@PreAuthorize("hasAuthority('ROLE_FIND_PEDIDO') and #oauth2.hasScope('read')")
+	public ResponseEntity<byte[]> getDocPedidoVendasById(@RequestParam Long id) throws Exception {
+		byte[] relatorio = service.pedidoVendasDoc(id);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(relatorio);
+	}
 }

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewDevolucaoNew;
 import com.romaneios.dto.devolucao.DevolucaoNewDTO;
 import com.romaneios.dto.retirada.RetiradaAccordionDTO;
 import com.romaneios.event.RecursoCriadoEvent;
@@ -60,6 +62,7 @@ public class DevolucaoResource {
 		return repository.getQtdDevoByLimpaId(idLimpa, idPrestador);
 	}
 
+	@JsonView(ViewDevolucaoNew.class)
 	@PostMapping
 	@PreAuthorize("hasAuthority('ROLE_ADD_LIMPA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Devolucao> save(@Valid @RequestBody DevolucaoNewDTO dto, HttpServletResponse response) {

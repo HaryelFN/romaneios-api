@@ -25,6 +25,9 @@ public class PedidoNewDTO {
 
 	@NotNull
 	private Float valorTotal;
+	
+	@NotNull
+	private String situacao;
 
 	private Cliente cliente;
 

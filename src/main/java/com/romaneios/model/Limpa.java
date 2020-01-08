@@ -15,6 +15,9 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewLimpasList;
+import com.romaneios.dto.ViewsJson.ViewPedidoDetails;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,27 +29,43 @@ public class Limpa implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonView(ViewLimpasList.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@JsonView(ViewLimpasList.class)
+	@NotNull
+	private String status;
+	
+	@JsonView(ViewLimpasList.class)
+	@NotNull
+	@Column(name = "status_pedido")
+	private String statusPedido;
+	
+	@JsonView({ViewLimpasList.class, ViewPedidoDetails.class})
 	@NotNull
 	private int qtd;
 
+	@JsonView(ViewLimpasList.class)
 	private Float valor;
 
+	@JsonView(ViewLimpasList.class)
 	@NotNull
 	@Column(name = "data_inicio")
 	private LocalDate dataInicio;
 
+	@JsonView(ViewLimpasList.class)
 	@Column(name = "data_conclusao")
 	private LocalDate dataConclusao;
 
+	@JsonView(ViewLimpasList.class)
 	@OneToOne
-	@JoinColumn(name = "id_item_pedido", nullable = true)
+	@JoinColumn(name = "id_item_pedido")
 	private ItemPedido itemPedido;
 
+	@JsonView(ViewLimpasList.class)
 	@JsonIgnore
 	@OneToMany(mappedBy = "limpa")
 	private List<Retirada> retiradas;

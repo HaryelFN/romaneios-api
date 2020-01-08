@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewDevolucaoNew;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,23 +25,28 @@ public class Devolucao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonView(ViewDevolucaoNew.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@JsonView(ViewDevolucaoNew.class)
 	@NotNull
 	@Column(name = "data_devolucao")
 	private LocalDate dataDevolucao;
 
+	@JsonView(ViewDevolucaoNew.class)
 	@NotNull
 	@Column(name = "qtd_devolucao")
 	private int qtdDevolucao;
 
+	@JsonView(ViewDevolucaoNew.class)
 	@NotNull
 	@Column(name = "valor")
 	private Float valor;
 
+	@JsonView(ViewDevolucaoNew.class)
 	@Column(name = "data_pag")
 	private LocalDate dataPag;
 

@@ -14,4 +14,5 @@ public interface PedidoResumoDTO {
 
 	public Float getValorTotal();
 
+	public String getSituacao();
 }

@@ -8,6 +8,4 @@ CREATE TABLE romaneio (
 	obs VARCHAR(50),
 	id_fornecedor BIGINT(20) NOT NULL,
 	FOREIGN KEY (id_fornecedor) REFERENCES fornecedor (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;	
-
-INSERT INTO romaneio (id, numero, situacao, data_entrada, valor_romaneio, valor_transporte, obs, id_fornecedor) VALUES (1, 1, 'Aberto', '2019-12-26', 10000, 1000, 'Alho comprado na safra', 1);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

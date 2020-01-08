@@ -1,0 +1,7 @@
+CREATE TABLE np (
+    id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+    dt_ven DATE NOT NULL,
+    dt_pag DATE,
+	valor DECIMAL(10,2),
+    emitente VARCHAR(100)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -11,6 +11,3 @@ CREATE TABLE cliente (
     logradouro VARCHAR(50) NOT NULL,
     numero VARCHAR(11)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO cliente (id, cpf_cnpj, nome_razao, telefone, email, cep, uf, cidade, bairro, logradouro, numero)
- VALUES (1, '03215312050', 'Cliente Teste 1', '62984098147', 'cliente1@gmail.com', '74550020', 'GO', 'Goiania', 'Sei la', 'Rua sem nome', null);

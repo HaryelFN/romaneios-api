@@ -12,6 +12,7 @@ public class ItemPedidoNewDTO {
 	@JsonIgnore
 	private Integer index;
 	private Long idRomaneio;
+	private Long idProdutoRomaneio;
 	private int qtd;
 	private int qtdLimpa;
 	private float valorUnitario;

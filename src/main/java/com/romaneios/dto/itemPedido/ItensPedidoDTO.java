@@ -16,4 +16,8 @@ public interface ItensPedidoDTO {
 
 	public Long getIdRomaneio();
 
+	public Long getIdProdutoRomaneio();
+	
+	public int getQtdLimpa();
+
 }

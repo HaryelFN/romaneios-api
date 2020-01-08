@@ -15,6 +15,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewRomaneioDetails;
 import com.romaneios.util.CpfCnpj;
 
 import lombok.Data;
@@ -27,6 +29,7 @@ public class Fornecedor implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonView(ViewRomaneioDetails.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +44,7 @@ public class Fornecedor implements Serializable {
 	@Column(name = "cpf_cnpj")
 	private String cpfCnpj;
 
+	@JsonView(ViewRomaneioDetails.class)
 	@NotNull
 	@Size(min = 3, max = 60)
 	@Column(name = "nome_razao")

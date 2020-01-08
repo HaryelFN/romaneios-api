@@ -7,6 +7,4 @@ public interface CaixaListChartDTO {
 	public LocalDate getData();
 
 	public Float getValor();
-
-	// public String getOperacao();
 }

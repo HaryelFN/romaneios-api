@@ -24,4 +24,10 @@ public class ProdutoRomaneioResource {
 	public List<ProdutoRomaneio> getPedResRomByIdRom(@PathVariable Long id) {
 		return repository.findByRomaneioId(id);
 	}
+	
+	@GetMapping("/estoque-geral")
+	@PreAuthorize("hasAuthority('ROLE_DASHBORD') and #oauth2.hasScope('read')")
+	public Integer getEstoqueTotal() {
+		return repository.getEstoqueTotal();
+	}
 }

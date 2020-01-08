@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewPedidoDetails;
 import com.romaneios.util.CpfCnpj;
 
 import lombok.Data;
@@ -25,6 +27,7 @@ public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonView(ViewPedidoDetails.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +42,7 @@ public class Cliente implements Serializable {
 	@Column(name = "cpf_cnpj", unique = true)
 	private String cpfCnpj;
 
+	@JsonView(ViewPedidoDetails.class)
 	@NotNull
 	@Size(min = 3, max = 60)
 	@Column(name = "nome_razao")

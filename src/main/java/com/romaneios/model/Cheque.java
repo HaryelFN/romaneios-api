@@ -10,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewMovCaixaDetails;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,6 +23,7 @@ public class Cheque implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonView(ViewMovCaixaDetails.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,8 +1,5 @@
 package com.romaneios.service;
 
-import java.util.Optional;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +23,12 @@ public class LimpaService {
 
 	public Limpa save(LimpaNewDTO dto) {
 
-		this.objSave = isExits(dto.getId());
-		Limpa obj = objSave;
-		obj.setValor(dto.getValor());
-		BeanUtils.copyProperties(obj, objSave, "id");
-		objSave = repository.save(objSave);
+		// BeanUtils.copyProperties(obj, objSave, "id");
+		
+		objSave = isExits(dto.getId());
+		objSave.setStatus("Processando");
+		objSave.setValor(dto.getValor());
+		objSave = repository.saveAndFlush(objSave);
 
 		dto.getRetiradas().forEach(r -> {
 			Retirada retirada = new Retirada();
@@ -51,10 +49,6 @@ public class LimpaService {
 	}
 
 	public Limpa isExits(Long id) {
-		Optional<Limpa> objSave = repository.findById(id);
-		if (!objSave.isPresent()) {
-			throw new IllegalArgumentException();
-		}
-		return objSave.get();
+		return repository.findById(id).orElseThrow(() -> new IllegalArgumentException());
 	}
 }

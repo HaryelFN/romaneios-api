@@ -1,6 +1,11 @@
 package com.romaneios.repository;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.romaneios.model.MovCaixa;
 
@@ -23,4 +28,7 @@ public interface MovCaixaRepository extends JpaRepository<MovCaixa, Long> {
 //	
 //	@Query(value = "SELECT pp.* FROM caixa c INNER JOIN pag_ped pp ON pp.id = c.id_pag_ped", nativeQuery = true)
 //	public List<PagamentoPedido> valorCaixa();
+	
+	@Query(value = "SELECT * FROM mov_caixa mc WHERE mc.`data` BETWEEN :inicio AND :fim ORDER BY mc.`data`, mc.id", nativeQuery = true)
+	public List<MovCaixa> getBetweenData(@Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
 }

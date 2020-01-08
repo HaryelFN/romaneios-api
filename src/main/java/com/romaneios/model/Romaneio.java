@@ -14,8 +14,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.romaneios.dto.ViewsJson.ViewMovCaixaDetails;
 import com.romaneios.dto.ViewsJson.ViewPagsEmCaixa;
+import com.romaneios.dto.ViewsJson.ViewPedidoDetails;
+import com.romaneios.dto.ViewsJson.ViewRomaneioDetails;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,36 +31,45 @@ public class Romaneio implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@JsonView(ViewPagsEmCaixa.class)
+	@JsonView({ ViewPagsEmCaixa.class, ViewRomaneioDetails.class, ViewPedidoDetails.class, ViewMovCaixaDetails.class })
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@JsonView({ ViewRomaneioDetails.class, ViewPedidoDetails.class })
 	@NotNull
 	private int numero;
 
-	@NotNull
+	@JsonView(ViewRomaneioDetails.class)
+	@NotNull	
 	private String situacao;
 
+	@JsonView(ViewRomaneioDetails.class)
 	@NotNull
 	@Column(name = "data_entrada")
 	private LocalDate dataEntrada;
 
+	@JsonView(ViewRomaneioDetails.class)
 	@NotNull
 	@Column(name = "valor_transporte")
 	private Float valorTransporte;
 
+	@JsonView(ViewRomaneioDetails.class)
 	@Column(name = "valor_romaneio")
 	private Float valorRomaneio;
 
+	@JsonView(ViewRomaneioDetails.class)
 	private String obs;
 
+	@JsonView(ViewRomaneioDetails.class)
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_fornecedor")
 	private Fornecedor fornecedor;
 
+	@JsonManagedReference
+	@JsonView({ ViewRomaneioDetails.class })
 	@OneToMany(mappedBy = "romaneio")
 	private List<ProdutoRomaneio> produtos;
 
