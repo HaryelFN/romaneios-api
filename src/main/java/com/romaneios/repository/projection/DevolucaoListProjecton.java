@@ -25,6 +25,8 @@ public interface DevolucaoListProjecton {
 	public LocalDate getDataD();
 	
 	public Integer getQtdD();
+	
+	public Float getValorD();
 
 	public LocalDate getDataPagD();
 }

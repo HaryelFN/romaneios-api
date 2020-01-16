@@ -60,7 +60,8 @@ public class ItemPedido implements Serializable {
 	@JoinColumn(name = "id_produto_romaneio")
 	private ProdutoRomaneio produtoRomaneio;
 	
-	@JsonView(ViewPedidoDetails.class)
+	@JsonIgnore
+	// @JsonView(ViewPedidoDetails.class)
 	@OneToOne(mappedBy = "itemPedido", cascade = CascadeType.REMOVE)
 	private Limpa limpa;
 

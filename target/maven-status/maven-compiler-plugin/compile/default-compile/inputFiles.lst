@@ -22,6 +22,7 @@ C:\Users\User\Desktop\work2\romaneios-api\src\main\java\com\romaneios\model\Clie
 C:\Users\User\Desktop\work2\romaneios-api\src\main\java\com\romaneios\resource\ItemMovResource.java
 C:\Users\User\Desktop\work2\romaneios-api\src\main\java\com\romaneios\dto\DespesaNewDTO.java
 C:\Users\User\Desktop\work2\romaneios-api\src\main\java\com\romaneios\dto\romaneio\RomaneioNewDTO.java
+C:\Users\User\Desktop\work2\romaneios-api\src\main\java\com\romaneios\dto\devolucao\DevolucaoUpdateDTO.java
 C:\Users\User\Desktop\work2\romaneios-api\src\main\java\com\romaneios\model\Endereco.java
 C:\Users\User\Desktop\work2\romaneios-api\src\main\java\com\romaneios\service\PrestadorService.java
 C:\Users\User\Desktop\work2\romaneios-api\src\main\java\com\romaneios\util\CpfCnpj.java

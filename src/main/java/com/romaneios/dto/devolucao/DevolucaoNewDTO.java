@@ -9,14 +9,16 @@ import lombok.Data;
 
 @Data
 public class DevolucaoNewDTO {
+	
+	private Long id;
 
-	public int qtd;
+	private int qtd;
 	
-	public Float valor;
+	private Float valor;
 	
-	public LocalDate dataPag;
+	private LocalDate dataPag;
 	
-	public Long idRetirada;
+	private Long idRetirada;
 	
 	private List<PagItemPedPagarDTO> list;
 }

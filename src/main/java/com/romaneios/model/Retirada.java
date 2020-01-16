@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.romaneios.dto.ViewsJson.ViewMovCaixaDetails;
 import com.romaneios.dto.ViewsJson.ViewRetiradaLimpaDTO;
@@ -52,6 +53,7 @@ public class Retirada implements Serializable {
 	@JoinColumn(name = "id_prestador")
 	private Prestador prestador;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_limpa")
 	private Limpa limpa;

@@ -44,6 +44,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Service
 public class PedidoService {
+	
+	float aux = 0;
 
 	private Pedido pedidoSave;
 
@@ -145,11 +147,6 @@ public class PedidoService {
 				// UPDATE QTD ESTOQUE
 				prRepository.updateQtdAtual(iN.getQtd(), iN.getIdProdutoRomaneio());
 
-				// UPDATE QTD PEDENETE
-//				if (pr.getQtdPendente() > 0) {
-//					prRepository.updateRetQtPendente(iN.getQtd(), iN.getIdProdutoRomaneio());
-//				}
-
 				ip = itemPedidoRepository.save(ip);
 
 				if (iN.getQtdLimpa() > 0) {
@@ -164,10 +161,16 @@ public class PedidoService {
 			});
 
 			// INSERT MOVIMENTAÇÃO CAIXA
+//			this.aux = 0;
+//			dto.getPagamentos().forEach(p -> {
+//				if (p.getTipo().equals("À vista")) {
+//					aux += p.getValor();
+//				}
+//			});
+			
 			MovCaixa mov = new MovCaixa();
-
 			mov.setData(LocalDate.now());
-			mov.setValor(pedidoSave.getValor());
+			mov.setValor(dto.getValorTotal());
 			mov.setDescricao("Venda pedido n° " + pedidoSave.getNumero());
 			mov.setOrigem("Pedido");
 			mov.setPedido(pedidoSave);

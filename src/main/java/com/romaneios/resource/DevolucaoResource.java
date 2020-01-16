@@ -1,7 +1,6 @@
 package com.romaneios.resource;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.romaneios.dto.ViewsJson.ViewDevolucaoNew;
 import com.romaneios.dto.devolucao.DevolucaoNewDTO;
+import com.romaneios.dto.pagitempedido.PagItemPedPagarDTO;
 import com.romaneios.dto.retirada.RetiradaAccordionDTO;
 import com.romaneios.event.RecursoCriadoEvent;
 import com.romaneios.model.Devolucao;
@@ -35,13 +36,13 @@ public class DevolucaoResource {
 
 	@Autowired
 	private DevolucaoRepository repository;
-	
+
 	@Autowired
 	private DevolucaoService service;
 
 	@Autowired
 	private ApplicationEventPublisher publisher;
-	
+
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('ROLE_FIND_LIMPA') and #oauth2.hasScope('read')")
 	public Long getById(@PathVariable Long id) {
@@ -55,7 +56,7 @@ public class DevolucaoResource {
 			@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fim) {
 		return service.getRetsAndDevsByprestadorId(id, inicio, fim);
 	}
-	
+
 	@GetMapping("/limpa/{idLimpa}/prestdor/{idPrestador}")
 	@PreAuthorize("hasAuthority('ROLE_ADD_LIMPA') and #oauth2.hasScope('write')")
 	public Integer getQtdDevByLimpaId(@PathVariable Long idLimpa, @PathVariable Long idPrestador) {
@@ -71,9 +72,10 @@ public class DevolucaoResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(objSave);
 	}
 
-	@GetMapping("/pagar/{id}")
+	@PutMapping("/pagar/{id}")
 	@PreAuthorize("hasAuthority('ROLE_ADD_LIMPA') and #oauth2.hasScope('write')")
-	public void pagarPrestadorByDevolucaoId(@PathVariable Long id) {
-		repository.updateDevolucao(id, LocalDateTime.now());
+	public ResponseEntity<Devolucao> update(@PathVariable Long id, @Valid @RequestBody List<PagItemPedPagarDTO> list) {
+		Devolucao objSave = service.pagarDevPrestador(id, list);
+		return ResponseEntity.ok(objSave);
 	}
 }

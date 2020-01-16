@@ -24,6 +24,7 @@ com\romaneios\event\RecursoCriadoEvent.class
 com\romaneios\service\NotaPromissoriaService.class
 com\romaneios\Main.class
 com\romaneios\service\PrestadorService.class
+com\romaneios\dto\devolucao\DevolucaoUpdateDTO.class
 com\romaneios\dto\ViewsJson$ViewPedidoDetails.class
 com\romaneios\dto\romaneio\RomaneioResumoDTO.class
 com\romaneios\repository\ItemPedidoRepository.class

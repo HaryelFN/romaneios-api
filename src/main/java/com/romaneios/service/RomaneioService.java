@@ -102,8 +102,6 @@ public class RomaneioService {
 		mov.setOrigem("Romaneio");
 		mov.setRomaneio(r);
 
-		mov = mcRepository.save(mov);
-
 		list.forEach(c -> {
 			if (c.getTipoPagamento().equals("Cheque")) {
 
@@ -117,8 +115,28 @@ public class RomaneioService {
 
 				ch.setDtPag(LocalDate.now());
 				ch = chRepository.saveAndFlush(ch);
+				
+				// TESTANDO DESCONTO APOS PAGAMENTO ROMANEIO
+				MovCaixa mov1 = new MovCaixa();
+				mov1.setData(LocalDate.now());
+				mov1.setValor(ch.getValor());
+				mov1.setDescricao("Recebimento cheque n° " + c.getNumCheque());
+				mov1.setOrigem("Cheque");
+				mov1.setCheque(ch);
+
+				mov1 = mcRepository.save(mov1);
+				
+				ItemMov im1 = new ItemMov();
+				im1.setTipo("Cheque");
+				im1.setMovCaixa(mov1);
+				im1.setValor(ch.getValor());
+				im1.setCheque(ch);
+				
+				imRepository.save(im1);
 			}
 		});
+		
+		mov = mcRepository.save(mov);
 
 		Caixa c1 = new Caixa();
 		c1.setData(LocalDate.now());

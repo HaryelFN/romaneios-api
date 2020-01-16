@@ -3,12 +3,14 @@ package com.romaneios.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.romaneios.dto.devolucao.DevolucaoDTO;
 import com.romaneios.dto.devolucao.DevolucaoNewDTO;
+import com.romaneios.dto.pagitempedido.PagItemPedPagarDTO;
 import com.romaneios.dto.retirada.RetiradaAccordionDTO;
 import com.romaneios.model.Caixa;
 import com.romaneios.model.Cheque;
@@ -70,7 +72,7 @@ public class DevolucaoService {
 				List<DevolucaoDTO> devolucoes = new ArrayList<>();
 
 				if (pro.getIdD() != null) {
-					DevolucaoDTO dDTO = new DevolucaoDTO(pro.getIdD(), pro.getDataD(), pro.getQtdD(),
+					DevolucaoDTO dDTO = new DevolucaoDTO(pro.getIdD(), pro.getDataD(), pro.getQtdD(), pro.getValorD(),
 							pro.getDataPagD());
 					devolucoes.add(dDTO);
 				}
@@ -82,8 +84,7 @@ public class DevolucaoService {
 				lisDTO.forEach(dto -> {
 					if (pro.getIdR() == dto.getId()) {
 						if (pro.getIdD() != null) {
-							DevolucaoDTO dDTO = new DevolucaoDTO(pro.getIdD(), pro.getDataD(), pro.getQtdD(),
-									pro.getDataPagD());
+							DevolucaoDTO dDTO = new DevolucaoDTO(pro.getIdD(), pro.getDataD(), pro.getQtdD(), pro.getValorD(), pro.getDataPagD());
 							dto.getDevolucoes().add(dDTO);
 						}
 					}
@@ -120,8 +121,7 @@ public class DevolucaoService {
 			this.mov = new MovCaixa();
 			mov.setData(LocalDate.now());
 			mov.setValor(-dto.getValor());
-			mov.setDescricao("Pagamento limpa de " + dto.getQtd() + " Kg, para o prestador "
-					+ retiradaSave.getPrestador().getNome());
+			mov.setDescricao("Pagamento limpa de " + dto.getQtd() + " Kg, para o prestador " + retiradaSave.getPrestador().getNome());
 			mov.setOrigem("Retirada");
 			mov.setRetirada(retiradaSave);
 
@@ -158,5 +158,65 @@ public class DevolucaoService {
 		}
 
 		return repository.save(obj);
+	}
+
+	public Devolucao pagarDevPrestador(Long id, List<PagItemPedPagarDTO> list) {
+
+		Devolucao objSave = isExists(id);
+		objSave.setDataPag(LocalDate.now());
+
+		// INSERT MOVIMENTAÇÃO
+		if (objSave.getDataPag() != null) {
+
+			objSave.setDataPag(objSave.getDataPag());
+
+			this.mov = new MovCaixa();
+			mov.setData(LocalDate.now());
+			mov.setValor(-objSave.getValor());
+			mov.setDescricao("Pagamento limpa de " + objSave.getQtdDevolucao() + " Kg, para o prestador " + objSave.getRetirada().getPrestador().getNome());
+			mov.setOrigem("Retirada");
+			mov.setRetirada(objSave.getRetirada());
+
+			mov = mcRepository.save(mov);
+
+			list.forEach(c -> {
+				if (c.getTipoPagamento().equals("Cheque")) {
+
+					Cheque ch = chService.isExists(c.getId());
+
+					// INSERT VALOR NO CAIXA
+					Caixa c1 = new Caixa();
+					c1.setData(LocalDate.now());
+					c1.setValor(c.getValor());
+					c1 = cxRepository.save(c1);
+
+					ch.setDtPag(LocalDate.now());
+					ch = chRepository.saveAndFlush(ch);
+				}
+			});
+
+			Caixa c1 = new Caixa();
+			c1.setData(LocalDate.now());
+			c1.setValor(-objSave.getValor());
+			c1 = cxRepository.save(c1);
+
+			ItemMov im = new ItemMov();
+			im.setTipo("À vista");
+			im.setMovCaixa(mov);
+			im.setValor(-objSave.getValor());
+			im.setCaixa(c1);
+
+			imRepository.save(im);
+		}
+
+		return repository.saveAndFlush(objSave);
+	}
+
+	public Devolucao isExists(Long id) {
+		Optional<Devolucao> objSave = repository.findById(id);
+		if (!objSave.isPresent()) {
+			throw new IllegalArgumentException();
+		}
+		return objSave.get();
 	}
 }
